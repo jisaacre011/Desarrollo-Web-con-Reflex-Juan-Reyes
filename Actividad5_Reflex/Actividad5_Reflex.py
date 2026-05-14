@@ -358,6 +358,74 @@ def grid_cards() -> rx.Component:
     )
 
 
+# Seccion nosotros
+def nosotros() -> rx.Component:
+    return rx.box(
+        rx.vstack(
+            rx.text(
+                "Filosofia",
+                font_size="0.65rem",
+                letter_spacing="0.5em",
+                color=AMBER,
+                text_transform="uppercase",
+            ),
+            rx.heading(
+                "Menos piezas.",
+                rx.el.br(),
+                "Mas significado.",
+                font_family="'Cormorant Garamond', serif",
+                font_weight="300",
+                font_size=["2rem", "3.5rem"],
+                color=PAPER,
+                letter_spacing="0.05em",
+                line_height="1.2",
+                text_align="center",
+            ),
+            rx.box(background=AMBER, height="1px", width="40px", margin_y="2rem"),
+            rx.text(
+                "Cada pieza de CAPSULA nace de una sola pregunta: que quedaria si eliminaras todo lo que sobra. No hay logo visible, no hay tendencias, no hay ruido. Solo tela, forma y tiempo.",
+                font_family="'Cormorant Garamond', serif",
+                font_size="1.15rem",
+                font_weight="300",
+                color=GRAPHITE,
+                max_width="520px",
+                text_align="center",
+                line_height="1.8",
+                font_style="italic",
+            ),
+            rx.box(height="3rem"),
+            rx.hstack(
+                rx.vstack(
+                    rx.text("10", font_family="'Cormorant Garamond', serif", font_size="3rem", font_weight="300", color=AMBER),
+                    rx.text("Piezas por edicion", font_size="0.65rem", letter_spacing="0.2em", color=GRAPHITE, text_transform="uppercase"),
+                    align="center",
+                ),
+                rx.box(width="1px", height="60px", background=GRAPHITE, opacity="0.3"),
+                rx.vstack(
+                    rx.text("100%", font_family="'Cormorant Garamond', serif", font_size="3rem", font_weight="300", color=AMBER),
+                    rx.text("Hecho a mano", font_size="0.65rem", letter_spacing="0.2em", color=GRAPHITE, text_transform="uppercase"),
+                    align="center",
+                ),
+                rx.box(width="1px", height="60px", background=GRAPHITE, opacity="0.3"),
+                rx.vstack(
+                    rx.text("0", font_family="'Cormorant Garamond', serif", font_size="3rem", font_weight="300", color=AMBER),
+                    rx.text("Logotipos visibles", font_size="0.65rem", letter_spacing="0.2em", color=GRAPHITE, text_transform="uppercase"),
+                    align="center",
+                ),
+                gap="3rem",
+                align="center",
+                justify="center",
+                flex_wrap="wrap",
+            ),
+            align="center",
+            padding="8rem 2rem",
+        ),
+        background=CARBON,
+        width="100%",
+        id="nosotros",
+    )
+
+
 # Pagina principal
 @rx.page(route="/", title="Capsula - Edicion N.001")
 def index() -> rx.Component:
@@ -370,6 +438,7 @@ def index() -> rx.Component:
         navbar(),
         hero(),
         grid_cards(),
+        nosotros(),
         background=INK,
         min_height="100vh",
         font_family="'DM Sans', sans-serif",
