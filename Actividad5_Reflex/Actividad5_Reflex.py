@@ -29,6 +29,7 @@ class PageState(rx.State):
         if self.email:
             self.joined = True
 
+
 # Navbar
 def navbar() -> rx.Component:
     return rx.box(
@@ -138,7 +139,226 @@ def hero() -> rx.Component:
     )
 
 
-# Pagina principal (temporal hasta el commit 5)
+# Separador de seccion
+def section_divider(label: str) -> rx.Component:
+    return rx.hstack(
+        rx.box(flex="1", height="1px", background=GRAPHITE, opacity="0.3"),
+        rx.text(
+            label,
+            font_size="0.65rem",
+            letter_spacing="0.4em",
+            color=GRAPHITE,
+            text_transform="uppercase",
+            padding_x="2rem",
+            white_space="nowrap",
+        ),
+        rx.box(flex="1", height="1px", background=GRAPHITE, opacity="0.3"),
+        align="center",
+        width="100%",
+        padding_x="3rem",
+        padding_y="4rem",
+    )
+
+
+# Card de producto horizontal
+def product_card(
+    product_id: str,
+    name: str,
+    subtitle: str,
+    price: str,
+    image_url: str,
+    reverse: bool = False,
+) -> rx.Component:
+    sizes = ["XS", "S", "M", "L", "XL"]
+
+    image_side = rx.box(
+        style={
+            "background_image": f"url('{image_url}')",
+            "background_size": "cover",
+            "background_position": "center",
+            "min_height": "520px",
+            "flex": "1",
+        },
+    )
+
+    details_side = rx.vstack(
+        rx.text(
+            f"N. {product_id}",
+            font_size="0.65rem",
+            letter_spacing="0.4em",
+            color=AMBER,
+            text_transform="uppercase",
+        ),
+        rx.heading(
+            name,
+            font_family="'Cormorant Garamond', serif",
+            font_size="2.8rem",
+            font_weight="300",
+            color=PAPER,
+            letter_spacing="0.05em",
+            line_height="1.1",
+        ),
+        rx.text(
+            subtitle,
+            font_family="'Cormorant Garamond', serif",
+            font_size="1rem",
+            font_weight="300",
+            color=GRAPHITE,
+            font_style="italic",
+            margin_top="0.25rem",
+        ),
+        rx.box(height="2rem"),
+        rx.text(
+            price,
+            font_size="1.8rem",
+            font_weight="300",
+            color=PAPER,
+            letter_spacing="0.05em",
+            font_family="'Cormorant Garamond', serif",
+        ),
+        rx.box(height="1.5rem"),
+        rx.text(
+            "Seleccionar talla",
+            font_size="0.65rem",
+            letter_spacing="0.25em",
+            color=GRAPHITE,
+            text_transform="uppercase",
+        ),
+        rx.hstack(
+            *[
+                rx.button(
+                    s,
+                    on_click=PageState.set_size(product_id, s),
+                    background=rx.cond(
+                        PageState.selected_sizes[product_id] == s,
+                        AMBER,
+                        "transparent",
+                    ),
+                    color=rx.cond(
+                        PageState.selected_sizes[product_id] == s,
+                        INK,
+                        GRAPHITE,
+                    ),
+                    border=rx.cond(
+                        PageState.selected_sizes[product_id] == s,
+                        f"1px solid {AMBER}",
+                        f"1px solid {GRAPHITE}",
+                    ),
+                    border_radius="0",
+                    font_size="0.65rem",
+                    letter_spacing="0.1em",
+                    padding="0.5rem 0.9rem",
+                    cursor="pointer",
+                    transition="all 0.2s ease",
+                    _hover={"border_color": AMBER, "color": AMBER},
+                )
+                for s in sizes
+            ],
+            gap="0.5rem",
+            flex_wrap="wrap",
+            margin_top="0.5rem",
+        ),
+        rx.box(height="2rem"),
+        rx.button(
+            "Anadir al carrito",
+            background=AMBER,
+            color=INK,
+            border_radius="0",
+            font_size="0.7rem",
+            letter_spacing="0.2em",
+            text_transform="uppercase",
+            padding="1rem 2.5rem",
+            cursor="pointer",
+            _hover={"background": GOLD_LIGHT},
+            transition="all 0.3s ease",
+            width="100%",
+        ),
+        rx.text(
+            "Edicion limitada - Solo 10 unidades",
+            font_size="0.65rem",
+            color=GRAPHITE,
+            letter_spacing="0.1em",
+            margin_top="0.75rem",
+        ),
+        align="start",
+        justify="center",
+        flex="1",
+        padding="4rem",
+        background=CARBON,
+        min_height="520px",
+    )
+
+    children = [image_side, details_side] if not reverse else [details_side, image_side]
+
+    return rx.flex(
+        *children,
+        direction="row",
+        width="100%",
+        max_width="1200px",
+        margin="0 auto",
+    )
+
+
+# Grid de productos
+def grid_cards() -> rx.Component:
+    products = [
+        {
+            "product_id": "01",
+            "name": "Abrigo Sombra",
+            "subtitle": "Lana merino, corte oversize",
+            "price": "RD$ 18,500",
+            "image_url": "https://placehold.co/700x900/1a1a1a/C9A96E?text=Pieza+01",
+            "reverse": False,
+        },
+        {
+            "product_id": "02",
+            "name": "Camisa Velo",
+            "subtitle": "Algodon organico, tejido artesanal",
+            "price": "RD$ 9,800",
+            "image_url": "https://placehold.co/700x900/161616/C9A96E?text=Pieza+02",
+            "reverse": True,
+        },
+        {
+            "product_id": "03",
+            "name": "Pantalon Silencio",
+            "subtitle": "Lino natural, tiro alto",
+            "price": "RD$ 12,200",
+            "image_url": "https://placehold.co/700x900/1a1a1a/C9A96E?text=Pieza+03",
+            "reverse": False,
+        },
+        {
+            "product_id": "04",
+            "name": "Blazer Noche",
+            "subtitle": "Seda cruda, confeccion a mano",
+            "price": "RD$ 24,000",
+            "image_url": "https://placehold.co/700x900/111111/C9A96E?text=Pieza+04",
+            "reverse": True,
+        },
+    ]
+
+    return rx.box(
+        section_divider("La Coleccion"),
+        rx.vstack(
+            *[
+                rx.box(
+                    product_card(**p),
+                    padding_y="0.5rem",
+                    width="100%",
+                )
+                for p in products
+            ],
+            gap="3rem",
+            width="100%",
+            padding_x="2rem",
+            padding_bottom="6rem",
+            align="center",
+        ),
+        width="100%",
+        id="coleccion",
+    )
+
+
+# Pagina principal
 @rx.page(route="/", title="Capsula - Edicion N.001")
 def index() -> rx.Component:
     return rx.box(
@@ -149,10 +369,12 @@ def index() -> rx.Component:
         ),
         navbar(),
         hero(),
+        grid_cards(),
         background=INK,
         min_height="100vh",
         font_family="'DM Sans', sans-serif",
         color=PAPER,
     )
+
 
 app = rx.App(stylesheets=["styles.css"])
